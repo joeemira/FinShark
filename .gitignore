@@ -1,0 +1,79 @@
+## Ignore build results
+bin/
+obj/
+out/
+
+## Ignore Rider / VS Code / VS for Mac / VS settings
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Ignore dotnet-specific stuff
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Ignore Visual Studio folders and files
+.vs/
+*.dbmdl
+*.bak
+*.log
+
+## Ignore dependency caches
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+
+## Ignore test results
+TestResults/
+*.coverage
+*.coveragexml
+*.trx
+
+## Ignore build outputs
+*.dll
+*.exe
+*.pdb
+*.cache
+*.zip
+
+## Ignore sensitive configs
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+## Ignore user secrets (for ASP.NET Core)
+**/secrets/
+**/secrets.json
+
+## Ignore ReSharper / JetBrains tools
+_ReSharper*/
+*.DotSettings.user
+
+## Ignore publish folder
+publish/
+
+## Ignore node_modules if using Angular/React in frontend
+node_modules/
+
+## Ignore logs
+*.log
+
+## Ignore OS-generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+## macOS
+.DS_Store
+
+## Linux
+*~
+
+## Windows
+*.swp
