@@ -41,10 +41,18 @@ namespace api.Mapper
 
 
         }
+        public static Stock ToUpdatedStock(this UpdateRequestDto dto, Stock existingStock)
+{
+    existingStock.Symbol = dto.Symbol;
+    existingStock.CompanyName = dto.CompanyName;
+    existingStock.Purchase = dto.Purchase;
+    existingStock.LastDiv = dto.LastDiv;
+    existingStock.Industry = dto.Industry;
+    existingStock.MarketCap = dto.MarketCap;
 
-
+    return existingStock;
+}
     }
-
 
 
 }
