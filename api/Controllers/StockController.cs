@@ -12,6 +12,7 @@ using api.DTOs.Stocks;
 using api.models;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using api.Interfaces;
 
 namespace api.Controllers
 {
@@ -20,16 +21,17 @@ namespace api.Controllers
     public class StockController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-
-        public StockController(ApplicationDBContext context)
+        private readonly IStockReposotry _stockRepo;
+        public StockController(ApplicationDBContext context, IStockReposotry stockRepo)
         {
             _context = context;
+            _stockRepo = stockRepo;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var stock = await _context.Stocks.ToListAsync();
+            var stock = await _stockRepo.GetAllAsync();
             var stockdto = stock.Select(s => s.ToStockDto());
             return Ok(stockdto);
         }

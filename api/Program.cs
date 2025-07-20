@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using api.Data; // Make sure this matches your namespace
+using api.Data;
+using System.Runtime.CompilerServices;
+using api.Interfaces;
+using api.reposotry; // Make sure this matches your namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<IStockReposotry, StockReposotry>();
 var app = builder.Build();
 
 // Middleware
