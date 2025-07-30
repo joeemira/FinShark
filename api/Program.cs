@@ -16,6 +16,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IStockReposotry, StockReposotry>();
+builder.Services.AddScoped<IcommentsREposotry, CommentsRposotory>();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; 
+});
+
 var app = builder.Build();
 
 // Middleware

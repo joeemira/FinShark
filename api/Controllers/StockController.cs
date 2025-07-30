@@ -13,6 +13,7 @@ using api.models;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using api.Interfaces;
+using api.Helpers;
 
 namespace api.Controllers
 {
@@ -29,62 +30,49 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]QueryObject query)
         {
-            var stock = await _stockRepo.GetAllAsync();
+            
+            var stock = await _stockRepo.GetAllAsync(query);
             var stockdto = stock.Select(s => s.ToStockDto());
             return Ok(stockdto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]  
         public async Task<IActionResult> GetById(int id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (stock == null)
-            {
-                return NotFound();
-            }
-
+            var stock = await _stockRepo.GetByIdAsync(id);
+            if (stock == null) return NotFound();
             return Ok(stock.ToStockDto());
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStockDto stockDto)
-        {
-            var StockModel = stockDto.FromStockCreateDto();
-            await _context.Stocks.AddAsync(StockModel);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = StockModel.Id }, StockModel.ToStockDto());
+        {   if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            var StockModel = stockDto.CreateDtofromStock();
+            var createdStock = await _stockRepo.CreateAsync(StockModel);
+            return CreatedAtAction(nameof(GetById), new { id = StockModel.Id }, createdStock.ToStockDto());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateRequestDto dto)
         {
-            var existingStock = await _context.Stocks.FindAsync(id);
-            if (existingStock == null)
-            {
-                return NotFound();
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            dto.ToUpdatedStock(existingStock); // Update fields via mapper
-            await _context.SaveChangesAsync();
+            var updatedStock= await _stockRepo.UpdateAsync(id, dto);
+            if (updatedStock == null) return NotFound();
 
-            return Ok(existingStock.ToStockDto());
+            return Ok(updatedStock.ToStockDto());
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var Stock = await _context.Stocks.FindAsync(id);
-            if (Stock == null)
-            {
-                return NotFound();
-            }
-
-            _context.Remove(Stock);
-            await _context.SaveChangesAsync();
+            await _stockRepo.DeleteAsync(id);
             return NoContent();
         }
     }
